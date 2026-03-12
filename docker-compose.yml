@@ -8,3 +8,10 @@ services:
     container_name: web-app
     ports:
       - "8090:8090"
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: ai-service
+    ports:
+      - "8000:8000"

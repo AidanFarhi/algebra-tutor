@@ -1,0 +1,8 @@
+# Python stuff
+.venv
+__pycache__
+
+# Go stuff
+
+# Mac stuff
+.DS_Store
