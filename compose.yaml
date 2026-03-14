@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
+
   db:
     image: postgres:16
-    container_name: postgres-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -19,27 +19,27 @@ services:
       timeout: 5s
       retries: 5
 
-  web-app:
-    build:
-      context: ./web-app
-      dockerfile: Dockerfile
-    container_name: web-app
-    ports:
-      - "8090:8090"
+  db-migration:
+    build: ./db-migration
     depends_on:
       db:
         condition: service_healthy
 
+  web-app:
+    build: ./web-app
+    ports:
+      - "8090:8090"
+    depends_on:
+      db-migration:
+        condition: service_completed_successfully
+
   ai-service:
-    build:
-      context: ./ai-service
-      dockerfile: Dockerfile
-    container_name: ai-service
+    build: ./ai-service
     ports:
       - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
+      db-migration:
+        condition: service_completed_successfully
 
 volumes:
   postgres_data:
