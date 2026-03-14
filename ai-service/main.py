@@ -4,22 +4,15 @@ from psycopg import connect
 app = FastAPI()
 
 
-def ping():
+@app.get("/api/v1/users")
+async def get_users():
+    users = {"users": []}
     try:
         with connect("host=db dbname=algtutor user=postgres password=postgres") as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT 1")
-                print(cur.fetchone())
+                cur.execute("SELECT * from app_user")
+                for user in cur.fetchall():
+                    users["users"].append({"first_name": user[1], "last_name": user[2]})
     except Exception as e:
         print(e)
-
-
-@app.get("/api/v1/hello")
-async def hello():
-    return {"hello": "world"}
-
-
-@app.get("/api/v1/pingdb")
-async def ping_db():
-    ping()
-    return {"msg": "done"}
+    return users
