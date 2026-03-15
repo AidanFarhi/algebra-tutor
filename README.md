@@ -23,3 +23,7 @@ This module handles DB migrations and seeding the DB with data.
 `web-app`
 
 This is where the front-end and back-end code lives. The "main" application.
+
+## Todos
+
+[ ] Complete the data model for the main application
