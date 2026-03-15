@@ -31,8 +31,8 @@ services:
       db-migration:
         condition: service_completed_successfully
 
-  ai-service:
-    build: ./ai-service
+  ml-service:
+    build: ./ml-service
     ports:
       - "8000:8000"
     depends_on:

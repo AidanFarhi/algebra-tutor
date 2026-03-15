@@ -1,6 +1,6 @@
 # Algebra Tutor
 
-This is an app that uses AI to assist with a user learning Algebra.
+This is an app that uses ML to assist with a user learning Algebra.
 
 ### To run
 
@@ -12,7 +12,7 @@ This is an app that uses AI to assist with a user learning Algebra.
 
 ## Modules
 
-`ai-service`
+`ml-service`
 
 This is the embedding & inference service.
 
