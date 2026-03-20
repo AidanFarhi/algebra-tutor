@@ -41,8 +41,8 @@ def main():
     try:
         print("creating tables")
         create_tables()
-        print("seeding tables")
-        seed_tables()
+        # print("seeding tables")
+        # seed_tables()
     except Exception:
         return 1
     return 0
