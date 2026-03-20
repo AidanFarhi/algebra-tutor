@@ -1,6 +1,8 @@
--- =========================
--- COURSES / UNITS
--- =========================
+CREATE TABLE app_user (
+  id SERIAL PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 
 CREATE TABLE course (
   id SERIAL PRIMARY KEY,
@@ -16,11 +18,6 @@ CREATE TABLE unit (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
--- =========================
--- UNIT COMPONENTS
--- lesson | quiz | test | exercise
--- =========================
-
 CREATE TABLE unit_component (
   id SERIAL PRIMARY KEY,
   unit_id INT NOT NULL REFERENCES unit(id) ON DELETE CASCADE,
@@ -29,10 +26,6 @@ CREATE TABLE unit_component (
   order_index INT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
-
--- =========================
--- CONTENT BLOCKS
--- =========================
 
 CREATE TABLE explanation (
   id SERIAL PRIMARY KEY,
@@ -50,14 +43,10 @@ CREATE TABLE interactive_element (
   order_index INT NOT NULL
 );
 
--- =========================
--- QUESTIONS
--- =========================
-
 CREATE TABLE question (
   id SERIAL PRIMARY KEY,
   unit_component_id INT NOT NULL REFERENCES unit_component(id) ON DELETE CASCADE,
-
+  interactive_element_id INT NULL REFERENCES interactive_element(id),  -- optional link to a widget
   prompt TEXT NOT NULL,
   answer_type TEXT NOT NULL CHECK (
     answer_type IN (
@@ -70,94 +59,45 @@ CREATE TABLE question (
       'graph'
     )
   ),
-
   input_config JSONB NOT NULL DEFAULT '{}'::jsonb,
   validation_config JSONB NOT NULL DEFAULT '{}'::jsonb,
   grading_config JSONB NOT NULL DEFAULT '{}'::jsonb,
-
-  version INT NOT NULL DEFAULT 1,
-
   order_index INT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
-
--- =========================
--- USERS (minimal)
--- =========================
-
-CREATE TABLE app_user (
-  id SERIAL PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- =========================
--- ATTEMPTS
--- =========================
 
 CREATE TABLE attempt (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
   unit_component_id INT NOT NULL REFERENCES unit_component(id) ON DELETE CASCADE,
-
   type TEXT NOT NULL CHECK (type IN ('quiz', 'test', 'exercise')),
   status TEXT NOT NULL CHECK (status IN ('in_progress', 'submitted', 'graded')),
-
   score NUMERIC,
   max_score NUMERIC,
-
   started_at TIMESTAMP DEFAULT NOW(),
   submitted_at TIMESTAMP
 );
-
--- =========================
--- ATTEMPT QUESTIONS (SNAPSHOT)
--- =========================
 
 CREATE TABLE attempt_question (
   id SERIAL PRIMARY KEY,
   attempt_id INT NOT NULL REFERENCES attempt(id) ON DELETE CASCADE,
   question_id INT NOT NULL,
-
   order_index INT NOT NULL,
-
   prompt_snapshot TEXT NOT NULL,
   input_config_snapshot JSONB NOT NULL,
   validation_config_snapshot JSONB NOT NULL,
   grading_config_snapshot JSONB NOT NULL,
-
   max_score NUMERIC NOT NULL
 );
-
--- =========================
--- ATTEMPT RESPONSES
--- =========================
 
 CREATE TABLE attempt_response (
   id SERIAL PRIMARY KEY,
   attempt_question_id INT NOT NULL REFERENCES attempt_question(id) ON DELETE CASCADE,
-
   answer_raw TEXT,
   answer_parsed JSONB,
-
   is_correct BOOLEAN,
   score NUMERIC,
   feedback TEXT,
-
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- =========================
--- OPTIONAL: EVENT LOGGING
--- =========================
-
-CREATE TABLE attempt_event (
-  id SERIAL PRIMARY KEY,
-  attempt_id INT NOT NULL REFERENCES attempt(id) ON DELETE CASCADE,
-
-  event_type TEXT NOT NULL,
-  payload JSONB,
-
   created_at TIMESTAMP DEFAULT NOW()
 );
 
