@@ -26,4 +26,4 @@ This is where the front-end and back-end code lives. The "main" application.
 
 ## Todos
 
-[ ] Complete the data model for the main application
+[ ] Build out the CRUD endpoints

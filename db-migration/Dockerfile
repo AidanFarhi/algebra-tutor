@@ -8,9 +8,11 @@ COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-COPY tables ./tables
+COPY drop_tables ./drop_tables
 
-COPY seed ./seed
+COPY create_tables ./create_tables
+
+COPY seed_tables ./seed_tables
 
 COPY *.py ./
 
