@@ -1,7 +1,8 @@
 -- Users
-INSERT INTO app_user (email) VALUES
-('alice@example.com'),
-('bob@example.com');
+INSERT INTO app_user (email, role, password_hash, provider, provider_id) VALUES
+('alice@example.com', 'user', 'hashed_pw_alice', 'local', NULL),
+('bob@example.com', 'admin', 'hashed_pw_bob', 'local', NULL),
+('charlie@gmail.com', 'user', NULL, 'google', 'google-123');
 
 -- Courses
 INSERT INTO course (title) VALUES

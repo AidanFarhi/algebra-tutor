@@ -24,6 +24,8 @@ This module handles DB migrations and seeding the DB with data.
 
 This is where the front-end and back-end code lives. The "main" application.
 
+Loosely follows the Repo-Service-Controller pattern.
+
 ## Todos
 
-[ ] Build out the CRUD endpoints
+[ ] Build out repo layer in golang app

@@ -1,6 +1,10 @@
 CREATE TABLE app_user (
   id SERIAL PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
+  role TEXT NOT NULL DEFAULT 'user',  -- 'user' or 'admin'
+  password_hash TEXT,                 -- NULL for OAuth users
+  provider TEXT NOT NULL,             -- 'local' or 'google'
+  provider_id TEXT,                   -- OAuth subject ID 
   created_at TIMESTAMP DEFAULT NOW()
 );
 
