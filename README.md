@@ -29,3 +29,7 @@ Loosely follows the Repo-Service-Controller pattern.
 ## Todos
 
 [ ] Build out repo layer in golang app
+
+[ ] Build out auth, registration, and login backend flow
+
+[ ] Build out login and registration front-end
