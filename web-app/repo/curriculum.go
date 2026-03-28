@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"algtutor/model"
+	"algtutor/domain"
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,7 +15,7 @@ func NewCurriculumRepo(pool *pgxpool.Pool) *CurriculumRepo {
 	return &CurriculumRepo{pool}
 }
 
-func (cr CurriculumRepo) SaveCourse(c model.Course) error {
+func (cr CurriculumRepo) CreateCourse(c domain.Course) error {
 	ctx := context.Background()
 	insertQuery := `
 		INSERT INTO course(title)
@@ -33,7 +33,7 @@ func (cr CurriculumRepo) SaveCourse(c model.Course) error {
 	return nil
 }
 
-func (cr CurriculumRepo) SaveUnit(u model.Unit) error {
+func (cr CurriculumRepo) CreateUnit(u domain.Unit) error {
 	ctx := context.Background()
 	insertQuery := `
 		INSERT INTO unit(course_id, title, order_index)

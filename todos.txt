@@ -1,0 +1,3 @@
+- Build out domain + repo layers
+- Build auth service + middleware layers
+- Build auth controller + view + web layers

@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"algtutor/model"
+	"algtutor/domain"
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,7 +15,7 @@ func NewAppUserRepo(pool *pgxpool.Pool) *AppUserRepo {
 	return &AppUserRepo{pool}
 }
 
-func (ur AppUserRepo) SaveUser(u model.AppUser) error {
+func (ur AppUserRepo) CreateUser(u domain.AppUser) error {
 	ctx := context.Background()
 	insertQuery := `
 		INSERT INTO app_user(email, role, password_hash, provider, provider_id)
