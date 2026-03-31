@@ -8,6 +8,13 @@ CREATE TABLE app_user (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE session (
+  id TEXT PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  expires_at TIMESTAMP NOT NULL
+);
+
 CREATE TABLE course (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
@@ -43,7 +50,6 @@ CREATE TABLE interactive_element (
   unit_component_id INT NOT NULL REFERENCES unit_component(id) ON DELETE CASCADE,
   type TEXT NOT NULL,
   input_config JSONB NOT NULL DEFAULT '{}'::jsonb,
-  behavior_config JSONB NOT NULL DEFAULT '{}'::jsonb,
   order_index INT NOT NULL
 );
 
@@ -104,6 +110,9 @@ CREATE TABLE attempt_response (
   feedback TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX idx_session_user ON session(user_id);
+CREATE INDEX idx_session_expires ON session(expires_at);
 
 CREATE INDEX idx_unit_course ON unit(course_id);
 CREATE INDEX idx_component_unit ON unit_component(unit_id);
