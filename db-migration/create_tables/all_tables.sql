@@ -70,8 +70,7 @@ CREATE TABLE question (
     )
   ),
   input_config JSONB NOT NULL DEFAULT '{}'::jsonb,
-  validation_config JSONB NOT NULL DEFAULT '{}'::jsonb,
-  grading_config JSONB NOT NULL DEFAULT '{}'::jsonb,
+  correct_answer JSONB NOT NULL,
   order_index INT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -95,8 +94,7 @@ CREATE TABLE attempt_question (
   order_index INT NOT NULL,
   prompt_snapshot TEXT NOT NULL,
   input_config_snapshot JSONB NOT NULL,
-  validation_config_snapshot JSONB NOT NULL,
-  grading_config_snapshot JSONB NOT NULL,
+  correct_answer_snapshot JSONB NOT NULL,
   max_score NUMERIC NOT NULL
 );
 
