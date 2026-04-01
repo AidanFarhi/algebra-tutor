@@ -26,11 +26,7 @@ func (cr CurriculumRepo) CreateCourse(c domain.Course) error {
 		insertQuery,
 		c.Title,
 	)
-	if err != nil {
-		// TODO: custom error handling and stuff
-		return err
-	}
-	return nil
+	return err
 }
 
 func (cr CurriculumRepo) CreateUnit(u domain.Unit) error {
@@ -46,9 +42,5 @@ func (cr CurriculumRepo) CreateUnit(u domain.Unit) error {
 		u.Title,
 		u.OrderIndex,
 	)
-	if err != nil {
-		// TODO: custom error handling and stuff
-		return err
-	}
-	return nil
+	return err
 }

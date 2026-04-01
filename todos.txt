@@ -1,3 +1,1 @@
-- Build out domain + repo layers
-- Build auth service + middleware layers
-- Build auth controller + view + web layers
+- Build out app_user flow (basic from controller -> db)
