@@ -1,54 +1,46 @@
 package main
 
 import (
+	"algtutor/controller"
+	"algtutor/repo"
+	"algtutor/service"
 	"context"
 	"fmt"
-	"io"
+	"log"
 	"net/http"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func TestDBConnection(connString string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	pool, err := pgxpool.New(ctx, connString)
-	if err != nil {
-		return fmt.Errorf("failed to create pool: %w", err)
-	}
-	defer pool.Close()
-
-	err = pool.Ping(ctx)
-	if err != nil {
-		return fmt.Errorf("database ping failed: %w", err)
-	}
-
-	fmt.Println("✅ Successfully connected to Postgres")
-	return nil
-}
-
 func main() {
 
-	// attempt to connect to db
+	// create db pool
 	connString := "postgres://postgres:postgres@db:5432/algtutor"
-	TestDBConnection(connString)
+	pool, err := pgxpool.New(context.Background(), connString)
+	if err != nil {
+		log.Fatal("error creating db pool", err.Error())
+	}
+
+	aur := repo.NewAppUserRepo(pool)
+	aus := service.NewAppUserService(aur)
+	auc := controller.NewAppUserController(aus)
 
 	mux := http.ServeMux{}
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("content-type", "application/json")
-		w.Write([]byte("{\"hello\": \"world\"}"))
-	})
+	mux.HandleFunc("/createuser", auc.CreateUser)
 
-	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		resp, _ := http.Get("http://ai-service:8000/api/v1/hello")
-		defer resp.Body.Close()
-		body, _ := io.ReadAll(resp.Body)
-		w.Header().Add("content-type", "application/json")
-		w.Write([]byte(body))
-	})
+	// mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	w.Header().Add("content-type", "application/json")
+	// 	w.Write([]byte("{\"hello\": \"world\"}"))
+	// })
+
+	// mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+	// 	resp, _ := http.Get("http://ai-service:8000/api/v1/hello")
+	// 	defer resp.Body.Close()
+	// 	body, _ := io.ReadAll(resp.Body)
+	// 	w.Header().Add("content-type", "application/json")
+	// 	w.Write([]byte(body))
+	// })
 
 	s := http.Server{
 		Addr:    ":8090",

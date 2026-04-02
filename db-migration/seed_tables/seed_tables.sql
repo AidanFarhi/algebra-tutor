@@ -19,24 +19,23 @@ INSERT INTO unit_component (unit_id, type, title, order_index) VALUES
 (1, 'quiz', 'Linear Quiz 1', 2),
 (2, 'lesson', 'Intro to Quadratics', 1);
 
--- Explanations (for lesson component id = 1)
+-- Explanations
 INSERT INTO explanation (unit_component_id, content, order_index) VALUES
 (1, 'To solve for x, isolate the variable on one side.', 1),
 (1, 'Use inverse operations to simplify the equation.', 2);
 
--- Interactive Elements
-INSERT INTO interactive_element (unit_component_id, type, input_config, behavior_config, order_index) VALUES
-(1, 'math_input', '{"placeholder": "Enter equation"}', '{"mode": "algebra"}', 1);
+-- Interactive Elements (FIXED: removed behavior_config)
+INSERT INTO interactive_element (unit_component_id, type, input_config, order_index) VALUES
+(1, 'math_input', '{"placeholder": "Enter equation"}', 1);
 
--- Questions (quiz component id = 2)
+-- Questions (FIXED: removed validation/grading, added correct_answer)
 INSERT INTO question (
   unit_component_id,
   interactive_element_id,
   prompt,
   answer_type,
   input_config,
-  validation_config,
-  grading_config,
+  correct_answer,
   order_index
 ) VALUES
 (
@@ -46,7 +45,6 @@ INSERT INTO question (
   'equation',
   '{"format": "linear"}',
   '{"solution": "x=2"}',
-  '{"points": 5}',
   1
 ),
 (
@@ -55,12 +53,11 @@ INSERT INTO question (
   'What is 5 + 7?',
   'number',
   '{"type": "integer"}',
-  '{"answer": 12}',
-  '{"points": 2}',
+  '12',
   2
 );
 
--- Attempt (user 1 taking quiz component 2)
+-- Attempt
 INSERT INTO attempt (
   user_id,
   unit_component_id,
@@ -71,15 +68,14 @@ INSERT INTO attempt (
 ) VALUES
 (1, 2, 'quiz', 'submitted', 6, 7);
 
--- Attempt Questions (snapshot of questions)
+-- Attempt Questions (FIXED: correct_answer_snapshot)
 INSERT INTO attempt_question (
   attempt_id,
   question_id,
   order_index,
   prompt_snapshot,
   input_config_snapshot,
-  validation_config_snapshot,
-  grading_config_snapshot,
+  correct_answer_snapshot,
   max_score
 ) VALUES
 (
@@ -89,7 +85,6 @@ INSERT INTO attempt_question (
   'Solve: 2x + 3 = 7',
   '{"format": "linear"}',
   '{"solution": "x=2"}',
-  '{"points": 5}',
   5
 ),
 (
@@ -98,8 +93,7 @@ INSERT INTO attempt_question (
   2,
   'What is 5 + 7?',
   '{"type": "integer"}',
-  '{"answer": 12}',
-  '{"points": 2}',
+  '12',
   2
 );
 
