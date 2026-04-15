@@ -1,1 +1,5 @@
-- Build out app_user flow (basic from controller -> db)
+[ ] home page
+
+[ ] login page
+
+[ ] register page
