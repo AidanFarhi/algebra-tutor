@@ -52,3 +52,23 @@ func (aur AppUserRepo) GetByID(id int) (domain.AppUser, error) {
 	)
 	return au, err
 }
+
+func (aur AppUserRepo) GetByEmail(email string) (domain.AppUser, error) {
+	ctx := context.Background()
+	query := `
+		SELECT id, email, role, password_hash, provider, provider_id, created_at
+		FROM app_user
+		WHERE email = $1
+	`
+	var au domain.AppUser
+	err := aur.db.QueryRow(ctx, query, email).Scan(
+		&au.Id,
+		&au.Email,
+		&au.Role,
+		&au.PasswordHash,
+		&au.Provider,
+		&au.ProviderId,
+		&au.CreatedAt,
+	)
+	return au, err
+}

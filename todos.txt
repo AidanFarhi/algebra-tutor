@@ -1,5 +1,11 @@
+[ ] register flow
+
+[ ] login flow
+
 [ ] home page
 
-[ ] login page
+[ ] register admin
 
-[ ] register page
+[ ] admin login
+
+[ ] create curriculum stuff (TBD)

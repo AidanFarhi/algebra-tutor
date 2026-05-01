@@ -1,9 +1,8 @@
 package controller
 
 import (
-	"algtutor/domain"
 	"algtutor/service"
-	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -15,28 +14,29 @@ func NewAppUserController(aus *service.AppUserService) *AppUserController {
 	return &AppUserController{aus}
 }
 
-func (auc *AppUserController) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		Email        string `json:"email"`
-		Role         string `json:"role"`
-		PasswordHash string `json:"passwordHash"`
-		Provider     string `json:"provider"`
-	}
-	err := json.NewDecoder(r.Body).Decode(&req)
+func (auc *AppUserController) Register(w http.ResponseWriter, r *http.Request) {
+	email := r.FormValue("register-email")
+	password := r.FormValue("register-password")
+	passwordRepeat := r.FormValue("register-password-repeat")
+	role := "user"
+	provider := "local"
+	session, err := auc.aus.RegisterAndLogin(email, password, passwordRepeat, role, provider)
 	if err != nil {
-		http.Error(w, "invalid request", http.StatusBadRequest)
-		return
-	}
-	au := domain.AppUser{
-		Email:        req.Email,
-		Role:         req.Role,
-		PasswordHash: req.PasswordHash,
-		Provider:     req.Provider,
-	}
-	err = auc.aus.CreateUser(au)
-	if err != nil {
+		// figure out what the error is and then render accordingly
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
+	fmt.Println(session.Id, session.UserId)
+	// set the cookie
+	// cookie := &http.Cookie{
+	// 	Name:     "session_id",
+	// 	Value:    session.Id,
+	// 	Path:     "/",
+	// 	HttpOnly: true,
+	// 	Secure:   true,
+	// 	SameSite: http.SameSiteStrictMode,
+	// 	MaxAge:   24 * 60 * 60 * 30, // 30 days in seconds
+	// }
+	// http.SetCookie(w, cookie)
+	// http.Redirect(w, r, "/", http.StatusFound)
 }

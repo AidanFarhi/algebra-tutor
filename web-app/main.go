@@ -27,7 +27,7 @@ func main() {
 
 	mux := http.ServeMux{}
 
-	mux.HandleFunc("/createuser", auc.CreateUser)
+	mux.HandleFunc("POST /users", auc.Register)
 
 	// mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	// 	w.Header().Add("content-type", "application/json")
